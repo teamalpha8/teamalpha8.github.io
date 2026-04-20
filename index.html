@@ -23,7 +23,6 @@
             line-height: 1.6;
         }
 
-        /* Hero Section */
         header {
             min-height: 100vh;
             display: flex;
@@ -52,7 +51,6 @@
             max-width: 800px;
         }
 
-        /* Layout & Sections */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -80,7 +78,6 @@
             display: inline-block;
         }
 
-        /* Grids */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -93,7 +90,6 @@
             gap: 1.5rem;
         }
 
-        /* Cards */
         .card {
             background-color: var(--bg-card);
             border: 1px solid rgba(255,255,255,0.1);
@@ -113,10 +109,9 @@
             font-size: 1.25rem;
         }
 
-        /* Team Table */
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
         }
 
@@ -140,7 +135,6 @@
             text-transform: uppercase;
         }
 
-        /* Animations */
         @keyframes glow {
             from { text-shadow: 0 0 10px rgba(56,189,248,0.2); }
             to { text-shadow: 0 0 20px rgba(56,189,248,0.6); }
@@ -155,10 +149,10 @@
 <body>
 
     <header>
-        <h1 class="hero-title">ThermoShield Pro [cite: 7]</h1>
-        <p class="hero-subtitle">Developed by Team 8 [cite: 1]</p>
+        <h1 class="hero-title">ThermoShield Pro</h1>
+        <p class="hero-subtitle">Developed by Team 8</p>
         <p class="hero-subtitle" style="font-size: 1.2rem; margin-top: 2rem;">
-            Development of an efficient, modular, lightweight, and climate-adaptive military sleeping system to enhance soldier comfort, mobility, and operational readiness in extreme field conditions. [cite: 3]
+            A modular, lightweight, and climate-adaptive military sleeping system designed for extreme field conditions.
         </p>
     </header>
 
@@ -168,111 +162,85 @@
             <h2>Our Focus & Goal</h2>
             <div class="grid-2">
                 <div class="card">
-                    <h3>The Problem</h3>
-                    <p>Existing systems face severe limitations including bulkiness (3.2–3.5 kg), poor climate adaptability, hygiene degradation in field conditions, and restricted mobility during rapid deployment scenarios. [cite: 6]</p>
+                    <h3>The Challenge</h3>
+                    <p>Current military systems are often bulky (3.5kg) and struggle with hygiene and extreme cold. Our focus was to reduce this weight significantly while expanding the operational temperature range.</p>
                 </div>
                 <div class="card">
-                    <h3>The Solution</h3>
-                    <p>A portable thermal sleeping bag engineered specifically for defence personnel, high-altitude operatives, and extreme environment hikers. [cite: 7] It features an operational temperature range of −50°C to +40°C [cite: 10] with a total system weight of ~1.59 kg — 54% below the 3.5 kg industry threshold. [cite: 9] The system uses passive thermoregulation with zero electronic dependency. [cite: 11]</p>
+                    <h3>The Goal</h3>
+                    <p>We engineered the ThermoShield Pro to weigh just 1.59 kg—a 54% reduction. It is designed to function from −50°C to +40°C using passive thermoregulation, ensuring soldier survival in Arctic, desert, or mountain environments.</p>
                 </div>
             </div>
         </section>
 
         <section id="materials" class="animate-on-scroll">
-            <h2>Materials & Architecture</h2>
-            <p style="margin-bottom: 2rem;">The ThermoShield Pro is built on a modular 5-layer architecture. [cite: 18] Below are the critical components and materials utilized in our prototype: [cite: 70]</p>
-            
+            <h2>Modular Architecture</h2>
             <div class="grid-3">
                 <div class="card">
-                    <h3>Outer Fabric</h3>
-                    <p>20D Ripstop Nylon, DWR coated, TPU laminate inner face. Weather resistant and IR suppressive. [cite: 70]</p>
+                    <h3>Outer Shell</h3>
+                    <p>20D Ripstop Nylon with DWR coating and TPU laminate. Provides waterproof and IR-suppressive protection.</p>
                 </div>
                 <div class="card">
                     <h3>MLI Core</h3>
-                    <p>12-micron, aluminium vapour deposited Mylar Film (97% reflectivity) [cite: 70] with a 0.5mm Polyester Mesh Spacer. [cite: 70]</p>
+                    <p>NASA/ISRO-derived Multilayer Reflective Insulation reflecting 97% of body heat using aluminized Mylar.</p>
                 </div>
                 <div class="card">
-                    <h3>Thermal Regulation</h3>
-                    <p>Paraffin microcapsule embedded PCM Textile (melting point 28–34°C) positioned in the torso and foot zones. [cite: 70]</p>
+                    <h3>Active Regulation</h3>
+                    <p>Phase Change Material (PCM) microcapsules that absorb and release heat to maintain body temperature.</p>
                 </div>
                 <div class="card">
-                    <h3>Ground Resistance</h3>
-                    <p>5mm thickness XPS Foam Sheet that is compression resistant and R-value stable for the bottom panel. [cite: 70]</p>
+                    <h3>Ground Panel</h3>
+                    <p>XPS Foam bonded with MLI to maintain thermal resistance even under the weight of the body.</p>
                 </div>
                 <div class="card">
-                    <h3>Moisture Control</h3>
-                    <p>Gore-Tex class ePTFE Membrane, acting as a breathable waterproof layer. [cite: 70]</p>
+                    <h3>Breathable Membrane</h3>
+                    <p>ePTFE (Gore-Tex class) layer that prevents moisture buildup and freezing within the bag layers.</p>
                 </div>
                 <div class="card">
-                    <h3>Inner Lining</h3>
-                    <p>Bamboo viscose + Merino wool blend acting as an antimicrobial comfort liner. [cite: 70]</p>
-                </div>
-                <div class="card">
-                    <h3>Hardware</h3>
-                    <p>Dual-sided, anti-snag YKK Aquaguard Zipper. [cite: 70] Insulated Hood + Draft Collar with single-pull cinch. [cite: 70]</p>
-                </div>
-                <div class="card">
-                    <h3>Construction</h3>
-                    <p>Heat Sealing Tape (3M 9472) for edge sealing MLI layers without needle penetration. [cite: 70]</p>
-                </div>
-                <div class="card">
-                    <h3>Portability</h3>
-                    <p>Waterproof dry-bag Compression Stuff Sack with a 4-strap system. [cite: 70]</p>
+                    <h3>Comfort Liner</h3>
+                    <p>Bamboo-viscose and Merino wool blend for natural antimicrobial properties and moisture wicking.</p>
                 </div>
             </div>
         </section>
 
         <section id="team" class="animate-on-scroll">
-            <h2>Team 8 [cite: 1]</h2>
+            <h2>Team 8 Members</h2>
             <div class="team-grid">
                 <div class="team-member">
                     <h4>Pavishna Dhaniya R</h4>
                     <p class="team-role">Visionary</p>
-                    <small>23BTT030</small>
                 </div>
                 <div class="team-member">
                     <h4>Nikitha Y</h4>
                     <p class="team-role">Hustler</p>
-                    <small>23BTT028</small>
                 </div>
                 <div class="team-member">
                     <h4>Nandiesh R V</h4>
                     <p class="team-role">Hustler</p>
-                    <small>23BTT026</small>
                 </div>
                 <div class="team-member">
                     <h4>Devaprasath S</h4>
                     <p class="team-role">Designer</p>
-                    <small>23BTT009</small>
                 </div>
                 <div class="team-member">
                     <h4>Rajesh M</h4>
                     <p class="team-role">Hacker</p>
-                    <small>23BTT308</small>
                 </div>
                 <div class="team-member">
                     <h4>Narren Karthikeyan U</h4>
                     <p class="team-role">Designer</p>
-                    <small>23BTT027</small>
                 </div>
-                </div>
+            </div>
         </section>
 
     </div>
 
     <script>
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
+        const observerOptions = { threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Stop observing once it's visible
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
