@@ -1,253 +1,1341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThermoShield Pro | Team 8</title>
-    <style>
-        :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.5);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThermoShield Pro — Team 8</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050a10;
+      --surface: #0a1520;
+      --surface2: #0f1e2e;
+      --gold: #c9a84c;
+      --gold2: #e8c870;
+      --teal: #1eb8c0;
+      --teal2: #56d8e0;
+      --red: #e84040;
+      --text: #d0dde8;
+      --muted: #607080;
+      --border: rgba(201, 168, 76, 0.18);
+      --glow: rgba(30, 184, 192, 0.25);
+    }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        header {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            padding: 2rem;
-            position: relative;
-        }
+    html { scroll-behavior: smooth; }
 
-        .hero-title {
-            font-size: 4rem;
-            margin: 0;
-            background: linear-gradient(45deg, #fff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
 
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            margin-top: 1rem;
-            max-width: 800px;
-        }
+    /* ===== CANVAS BACKGROUND ===== */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(5, 10, 16, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--teal); }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--teal2); }
+    .nav-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 4px 14px;
+      letter-spacing: 2px;
+    }
 
-        section {
-            margin-bottom: 6rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
+    /* ===== SECTIONS ===== */
+    section { position: relative; z-index: 1; }
 
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 40px 60px;
+      overflow: hidden;
+    }
 
-        h2 {
-            font-size: 2.5rem;
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent-glow);
-            padding-bottom: 0.5rem;
-            margin-bottom: 2rem;
-            display: inline-block;
-        }
+    /* Sleeping Bag SVG Background */
+    .hero-bag-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.12;
+      pointer-events: none;
+      animation: bagFloat 8s ease-in-out infinite;
+    }
+    @keyframes bagFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-18px) scale(1.02); }
+    }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 5px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 0.3s;
+    }
+    .hero-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.6rem, 6vw, 5.2rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: 2px;
+      color: #fff;
+      opacity: 0;
+      animation: fadeUp 0.9s forwards 0.5s;
+    }
+    .hero-title .accent { color: var(--gold); }
+    .hero-title .accent2 { color: var(--teal); }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.7;
+      margin: 24px auto 0;
+      font-weight: 400;
+      opacity: 0;
+      animation: fadeUp 1s forwards 0.7s;
+    }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 60px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 1s forwards 1s;
+    }
+    .stat {
+      text-align: center;
+      padding: 20px 28px;
+      border: 1px solid var(--border);
+      background: rgba(10, 21, 32, 0.6);
+      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .stat-val {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+    }
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+      display: block;
+    }
 
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 1.5rem;
-            border-radius: 12px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s forwards 1.8s;
+    }
+    .scroll-hint span {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--teal), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--accent-glow);
-        }
+    /* ===== SECTION COMMON ===== */
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+    .section-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 5px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .section-title .g { color: var(--gold); }
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      margin: 20px auto 0;
+    }
 
-        .card h3 {
-            color: #fff;
-            margin-top: 0;
-            font-size: 1.25rem;
-        }
+    /* ===== ABOUT / GOAL ===== */
+    #about {
+      padding: 120px 0;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .about-block h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .about-block h3::before {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 2px;
+      background: var(--gold);
+    }
+    .about-block p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .goal-list {
+      list-style: none;
+      margin-top: 20px;
+    }
+    .goal-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .goal-list li .bullet {
+      color: var(--teal);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
 
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
+    /* ===== LAYERS ===== */
+    #layers {
+      padding: 120px 0;
+      background: linear-gradient(180deg, transparent, rgba(10,21,32,0.5), transparent);
+    }
+    .layers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .layer-card {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: start;
+      gap: 28px;
+      padding: 32px 36px;
+      border: 1px solid transparent;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      transition: all 0.4s ease;
+      cursor: default;
+    }
+    .layer-card:first-child { border-top: 1px solid var(--border); }
+    .layer-card:hover {
+      background: rgba(10,21,32,0.7);
+      border-color: var(--border);
+      border-bottom-color: var(--gold);
+      transform: translateX(6px);
+    }
+    .layer-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: rgba(201,168,76,0.15);
+      line-height: 1;
+      transition: color 0.4s;
+    }
+    .layer-card:hover .layer-num { color: rgba(201,168,76,0.5); }
+    .layer-content h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      color: var(--gold2);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .layer-content p {
+      font-size: 0.97rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .layer-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--teal);
+      border: 1px solid var(--teal);
+      padding: 4px 10px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      align-self: flex-start;
+      margin-top: 4px;
+    }
 
-        .team-member {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            border-left: 4px solid var(--accent);
-        }
+    /* ===== MATERIALS ===== */
+    #materials {
+      padding: 120px 0;
+    }
+    .materials-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+    }
+    .materials-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .materials-table thead th {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding: 18px 20px;
+      background: rgba(10,21,32,0.8);
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .materials-table tbody tr {
+      border-bottom: 1px solid rgba(201,168,76,0.06);
+      transition: background 0.25s;
+    }
+    .materials-table tbody tr:hover {
+      background: rgba(30,184,192,0.04);
+    }
+    .materials-table tbody td {
+      padding: 16px 20px;
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .materials-table tbody td:first-child {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--gold);
+      font-size: 0.78rem;
+    }
+    .materials-table tbody td:nth-child(3) {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .price-val {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.82rem;
+      color: var(--teal2);
+    }
+    .total-row td {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      color: var(--gold) !important;
+      background: rgba(201,168,76,0.06);
+      border-top: 2px solid var(--gold) !important;
+      padding: 20px !important;
+    }
 
-        .team-member h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
-        }
+    /* ===== TEAM ===== */
+    #team {
+      padding: 120px 0;
+      background: linear-gradient(180deg, transparent, rgba(10,21,32,0.4), transparent);
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .team-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+    }
+    .team-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .team-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201,168,76,0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(30,184,192,0.07);
+    }
+    .team-card:hover::before { transform: scaleX(1); }
+    .team-id {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+    .team-avatar {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--gold), var(--teal));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #050a10;
+      margin-bottom: 18px;
+    }
+    .team-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .team-role {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .role-visionary { color: var(--gold2); }
+    .role-hustler { color: var(--teal2); }
+    .role-designer { color: #a78bfa; }
+    .role-hacker { color: var(--red); }
+    .team-roll {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 10px;
+      font-family: 'Share Tech Mono', monospace;
+    }
 
-        .team-role {
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
+    /* ===== MILESTONES ===== */
+    #milestones {
+      padding: 120px 0;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--gold), var(--teal), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 36px;
+      padding: 24px 28px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color 0.3s;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 24px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 12px var(--gold);
+    }
+    .timeline-item.done::before { background: var(--teal); box-shadow: 0 0 12px var(--teal); }
+    .timeline-item:hover { border-color: rgba(201,168,76,0.3); }
+    .timeline-item h4 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.88rem;
+      color: var(--gold2);
+      margin-bottom: 8px;
+    }
+    .timeline-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .timeline-meta span {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+    }
+    .t-target { color: var(--muted); }
+    .t-done { color: var(--teal); }
+    .t-pending { color: rgba(201,168,76,0.4); }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(56,189,248,0.2); }
-            to { text-shadow: 0 0 20px rgba(56,189,248,0.6); }
-        }
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 60px 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    footer p {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+    footer .footer-logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    footer .footer-logo span { color: var(--teal); }
 
-        @media (max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .hero-title { font-size: 2.5rem; }
-        }
-    </style>
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ===== GLITCH EFFECT ===== */
+    .glitch {
+      position: relative;
+    }
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--teal);
+      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+      transform: translateX(-3px);
+      animation: glitch 6s infinite;
+      opacity: 0;
+    }
+    @keyframes glitch {
+      0%, 95%, 100% { opacity: 0; }
+      96% { opacity: 0.6; transform: translateX(-4px); }
+      97% { opacity: 0.4; transform: translateX(4px); }
+      98% { opacity: 0; }
+    }
+
+    /* Scan line overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Corner decoration */
+    .corner-deco {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+    }
+    .corner-deco.tl { top: 12px; left: 12px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+    .corner-deco.tr { top: 12px; right: 12px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+    .corner-deco.bl { bottom: 12px; left: 12px; border-bottom: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+    .corner-deco.br { bottom: 12px; right: 12px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links, .nav-badge { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .layer-card { grid-template-columns: 60px 1fr; }
+      .layer-tag { display: none; }
+      .section-inner { padding: 0 20px; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1 class="hero-title">ThermoShield Pro</h1>
-        <p class="hero-subtitle">Developed by Team 8</p>
-        <p class="hero-subtitle" style="font-size: 1.2rem; margin-top: 2rem;">
-            A modular, lightweight, and climate-adaptive military sleeping system designed for extreme field conditions.
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Thermo<span>Shield</span> Pro</div>
+  <ul class="nav-links">
+    <li><a href="#about">Mission</a></li>
+    <li><a href="#layers">Architecture</a></li>
+    <li><a href="#materials">Materials</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#milestones">Timeline</a></li>
+  </ul>
+  <div class="nav-badge">TEAM 8</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <!-- Sleeping bag SVG background illustration -->
+  <div class="hero-bag-bg">
+    <svg width="700" height="700" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer mummy shape -->
+      <ellipse cx="350" cy="200" rx="140" ry="160" fill="none" stroke="#c9a84c" stroke-width="2"/>
+      <!-- Body shape -->
+      <path d="M210 200 Q200 400 230 560 Q280 640 350 650 Q420 640 470 560 Q500 400 490 200" fill="none" stroke="#c9a84c" stroke-width="2"/>
+      <!-- Layer lines -->
+      <path d="M215 280 Q350 260 485 280" fill="none" stroke="#1eb8c0" stroke-width="1" stroke-dasharray="6,4"/>
+      <path d="M215 360 Q350 340 485 360" fill="none" stroke="#1eb8c0" stroke-width="1" stroke-dasharray="6,4"/>
+      <path d="M220 440 Q350 420 480 440" fill="none" stroke="#1eb8c0" stroke-width="1" stroke-dasharray="6,4"/>
+      <path d="M232 520 Q350 500 468 520" fill="none" stroke="#1eb8c0" stroke-width="1" stroke-dasharray="6,4"/>
+      <!-- Zipper line -->
+      <line x1="350" y1="100" x2="350" y2="620" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <!-- Hood circle -->
+      <circle cx="350" cy="165" r="90" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+      <!-- Cinch cord -->
+      <ellipse cx="350" cy="165" rx="55" ry="40" fill="none" stroke="#e8c870" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <!-- Foot box -->
+      <ellipse cx="350" cy="590" rx="90" ry="50" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+      <!-- MLI shimmer lines -->
+      <path d="M235 310 Q350 295 465 310" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.7"/>
+      <path d="M235 325 Q350 310 465 325" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.7"/>
+      <path d="M237 390 Q350 375 463 390" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.7"/>
+      <path d="M237 405 Q350 390 463 405" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.7"/>
+      <!-- Compression strap hint -->
+      <path d="M245 470 Q350 460 455 470" fill="none" stroke="#56d8e0" stroke-width="2"/>
+      <!-- Layer labels hints -->
+      <circle cx="350" cy="350" r="280" fill="none" stroke="rgba(30,184,192,0.1)" stroke-width="1"/>
+      <circle cx="350" cy="350" r="310" fill="none" stroke="rgba(201,168,76,0.07)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="hero-tag">▸ Portable Thermal Sleeping System · Defence Grade · Team 8</div>
+  <h1 class="hero-title glitch" data-text="THERMOSHIELD PRO">
+    THERMO<span class="accent">SHIELD</span><br/><span class="accent2">PRO</span>
+  </h1>
+  <p class="hero-subtitle">
+    A modular, lightweight, climate-adaptive military sleeping system engineered for defence personnel, high-altitude operatives, and extreme environment hikers — powered by NASA/ISRO-derived Multilayer Reflective Insulation.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-val">1.59<span style="font-size:1rem">kg</span></span>
+      <span class="stat-label">Total System Weight</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">−50°</span>
+      <span class="stat-label">Min Operating Temp</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">5</span>
+      <span class="stat-label">Modular Layers</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">97%</span>
+      <span class="stat-label">Radiated Heat Reflected</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">45s</span>
+      <span class="stat-label">Full Pack-Down Time</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT / GOAL -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// 01 — Mission Overview</span>
+      <h2 class="section-title">Why We <span class="g">Build This</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-block reveal">
+        <h3>The Problem</h3>
+        <p>
+          Existing military sleeping systems suffer critical field limitations: bulkiness of 3.2–3.5 kg, poor climate adaptability, hygiene degradation under sustained use, and restricted mobility during rapid deployment scenarios. Soldiers operating in Arctic, Himalayan, desert, and tropical theatres need a system that works across all environments without compromise.
         </p>
-    </header>
+        <br/>
+        <p>
+          ThermoShield Pro directly addresses soldier survivability, operational readiness, and logistical efficiency. The system achieves a 54% weight reduction below the 3.5 kg industry threshold while delivering a −50°C to +40°C operational range through purely passive thermoregulation — zero electronic dependency, zero failure modes.
+        </p>
+      </div>
+      <div class="about-block reveal">
+        <h3>Our Goals</h3>
+        <ul class="goal-list">
+          <li>
+            <span class="bullet">►</span>
+            <span>Design a modular 5-layer sleeping system with each layer serving a distinct, non-redundant thermal or structural function</span>
+          </li>
+          <li>
+            <span class="bullet">►</span>
+            <span>Achieve total system weight of ~1.59 kg — using NASA/ISRO-derived MLI as the primary insulation technology</span>
+          </li>
+          <li>
+            <span class="bullet">►</span>
+            <span>Deliver passive thermoregulation across −50°C to +40°C without any batteries or electronics</span>
+          </li>
+          <li>
+            <span class="bullet">►</span>
+            <span>Reduce thermal signature for stealth field compatibility</span>
+          </li>
+          <li>
+            <span class="bullet">►</span>
+            <span>Enable full pack-down in under 45 seconds into 28 × 18 cm — fitting standard military daypack side pockets</span>
+          </li>
+          <li>
+            <span class="bullet">►</span>
+            <span>Build for 5–8 year field lifespan under daily military use</span>
+          </li>
+          <li>
+            <span class="bullet">►</span>
+            <span>Allow independent layer replacement and climate adaptation in-field</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="container">
-        
-        <section id="focus" class="animate-on-scroll">
-            <h2>Our Focus & Goal</h2>
-            <div class="grid-2">
-                <div class="card">
-                    <h3>The Challenge</h3>
-                    <p>Current military systems are often bulky (3.5kg) and struggle with hygiene and extreme cold. Our focus was to reduce this weight significantly while expanding the operational temperature range.</p>
-                </div>
-                <div class="card">
-                    <h3>The Goal</h3>
-                    <p>We engineered the ThermoShield Pro to weigh just 1.59 kg—a 54% reduction. It is designed to function from −50°C to +40°C using passive thermoregulation, ensuring soldier survival in Arctic, desert, or mountain environments.</p>
-                </div>
-            </div>
-        </section>
+<!-- LAYER ARCHITECTURE -->
+<section id="layers">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// 02 — System Architecture</span>
+      <h2 class="section-title">5-Layer <span class="g">Thermal Design</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="layers-grid reveal">
 
-        <section id="materials" class="animate-on-scroll">
-            <h2>Modular Architecture</h2>
-            <div class="grid-3">
-                <div class="card">
-                    <h3>Outer Shell</h3>
-                    <p>20D Ripstop Nylon with DWR coating and TPU laminate. Provides waterproof and IR-suppressive protection.</p>
-                </div>
-                <div class="card">
-                    <h3>MLI Core</h3>
-                    <p>NASA/ISRO-derived Multilayer Reflective Insulation reflecting 97% of body heat using aluminized Mylar.</p>
-                </div>
-                <div class="card">
-                    <h3>Active Regulation</h3>
-                    <p>Phase Change Material (PCM) microcapsules that absorb and release heat to maintain body temperature.</p>
-                </div>
-                <div class="card">
-                    <h3>Ground Panel</h3>
-                    <p>XPS Foam bonded with MLI to maintain thermal resistance even under the weight of the body.</p>
-                </div>
-                <div class="card">
-                    <h3>Breathable Membrane</h3>
-                    <p>ePTFE (Gore-Tex class) layer that prevents moisture buildup and freezing within the bag layers.</p>
-                </div>
-                <div class="card">
-                    <h3>Comfort Liner</h3>
-                    <p>Bamboo-viscose and Merino wool blend for natural antimicrobial properties and moisture wicking.</p>
-                </div>
-            </div>
-        </section>
+      <div class="layer-card">
+        <div class="layer-num">01</div>
+        <div class="layer-content">
+          <h4>Outer Shell — Weather Armour</h4>
+          <p>20D Ripstop Nylon with DWR coating + TPU laminate inner face + metalized low-emissivity inner coating. Rated 10,000mm hydrostatic head pressure. Ripstop grid arrests tear propagation on rocky terrain. IR-suppressive dye option for stealth compatibility.</p>
+        </div>
+        <span class="layer-tag">280g</span>
+      </div>
 
-        <section id="team" class="animate-on-scroll">
-            <h2>Team 8 Members</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <h4>Pavishna Dhaniya R</h4>
-                    <p class="team-role">Visionary</p>
-                </div>
-                <div class="team-member">
-                    <h4>Nikitha Y</h4>
-                    <p class="team-role">Hustler</p>
-                </div>
-                <div class="team-member">
-                    <h4>Nandiesh R V</h4>
-                    <p class="team-role">Hustler</p>
-                </div>
-                <div class="team-member">
-                    <h4>Devaprasath S</h4>
-                    <p class="team-role">Designer</p>
-                </div>
-                <div class="team-member">
-                    <h4>Rajesh M</h4>
-                    <p class="team-role">Hacker</p>
-                </div>
-                <div class="team-member">
-                    <h4>Narren Karthikeyan U</h4>
-                    <p class="team-role">Designer</p>
-                </div>
-            </div>
-        </section>
+      <div class="layer-card">
+        <div class="layer-num">02</div>
+        <div class="layer-content">
+          <h4>MLI Core — Primary Innovation</h4>
+          <p>10 alternating layers of 12-micron aluminized Mylar film and 0.5mm polyester mesh spacer. Reflects 97% of radiated body heat. Total thickness 3–4mm, weight 80–100 g/m². Heat-sealed construction — no needle penetration to preserve reflective integrity. Bridges a thermal gap of 68–74°C between environment and body surface.</p>
+        </div>
+        <span class="layer-tag">200g</span>
+      </div>
+
+      <div class="layer-card">
+        <div class="layer-num">03</div>
+        <div class="layer-content">
+          <h4>PCM Thermal Regulation Layer</h4>
+          <p>Phase Change Material microcapsule-embedded textile placed at torso and foot zones only. Paraffin-based PCM with melting point 28–34°C absorbs excess body heat when warm and releases it when cooling — fully passive thermoregulation with no batteries or failure modes.</p>
+        </div>
+        <span class="layer-tag">150g</span>
+      </div>
+
+      <div class="layer-card">
+        <div class="layer-num">04</div>
+        <div class="layer-content">
+          <h4>Ground Resistance Panel — Bottom Only</h4>
+          <p>5mm XPS foam bonded with 5 MLI layers specifically for the bottom-contact panel. XPS maintains R-value under 80kg body-weight compression — unlike pure MLI which loses air gaps under pressure. Detaches via perimeter zipper for use as standalone sit pad or ground mat — dual-purpose field utility.</p>
+        </div>
+        <span class="layer-tag">180g</span>
+      </div>
+
+      <div class="layer-card">
+        <div class="layer-num">05</div>
+        <div class="layer-content">
+          <h4>Inner Comfort Liner — Skin Contact</h4>
+          <p>Bamboo-viscose and Merino wool blend. Naturally antimicrobial, moisture-wicking, and soft for extended multi-day field use without requiring base layers. Actively wicks sweat away from skin surface, preventing moisture buildup in colder conditions.</p>
+        </div>
+        <span class="layer-tag">200g</span>
+      </div>
 
     </div>
 
-    <script>
-        const observerOptions = { threshold: 0.15 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+    <!-- Additional features -->
+    <div style="margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+      <div class="team-card reveal" style="padding: 24px;">
+        <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+        <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:.8rem;color:var(--teal2);margin-bottom:12px;">MOISTURE CONTROL</div>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7">ePTFE breathable membrane between MLI and inner liner allows sweat vapor to escape outward while blocking liquid water and ice crystal formation inward — critical below −35°C.</p>
+      </div>
+      <div class="team-card reveal" style="padding: 24px;">
+        <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+        <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:.8rem;color:var(--teal2);margin-bottom:12px;">ERGONOMIC SHAPE</div>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7">Mummy-contour hybrid: 85cm shoulder width tapering to 55cm at foot. Anatomically shaped trapezoidal foot box. Draft collar behind main zipper. Fully unzippable as flat quilt — dual operational mode.</p>
+      </div>
+      <div class="team-card reveal" style="padding: 24px;">
+        <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+        <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:.8rem;color:var(--teal2);margin-bottom:12px;">QUICK DEPLOYMENT</div>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7">Dual-sided YKK Aquaguard anti-snag zipper operable with one gloved hand. Single-pull hood cinch cord. 4-compression strap stuff sack — full pack-down in under 45 seconds.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        document.querySelectorAll('.animate-on-scroll').forEach(section => {
-            observer.observe(section);
+<!-- MATERIALS / BOM -->
+<section id="materials">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// 03 — Bill of Materials</span>
+      <h2 class="section-title">Components &amp; <span class="g">Materials</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="materials-table-wrap reveal">
+      <table class="materials-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Component</th>
+            <th>Specification</th>
+            <th>Unit (₹)</th>
+            <th>Qty</th>
+            <th>Total (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td>Outer Fabric</td>
+            <td>20D Ripstop Nylon, DWR coated, TPU laminate inner face</td>
+            <td><span class="price-val">800</span></td>
+            <td>5</td>
+            <td><span class="price-val">4,000</span></td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td>Aluminized Mylar Film</td>
+            <td>12-micron, aluminium vapour deposited, 97% reflectivity</td>
+            <td><span class="price-val">200/m²</span></td>
+            <td>15</td>
+            <td><span class="price-val">3,000</span></td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td>Polyester Mesh Spacer</td>
+            <td>0.5mm, 15–20 g/m², 1–2mm mesh opening</td>
+            <td><span class="price-val">35/m²</span></td>
+            <td>15</td>
+            <td><span class="price-val">525</span></td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td>XPS Foam Sheet</td>
+            <td>5mm thickness, compression resistant, R-value stable</td>
+            <td><span class="price-val">300</span></td>
+            <td>2</td>
+            <td><span class="price-val">600</span></td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td>PCM Textile</td>
+            <td>Paraffin microcapsule embedded, melting point 28–34°C</td>
+            <td><span class="price-val">1,200</span></td>
+            <td>2</td>
+            <td><span class="price-val">2,400</span></td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td>ePTFE Membrane</td>
+            <td>Breathable waterproof, Gore-Tex class</td>
+            <td><span class="price-val">900</span></td>
+            <td>2</td>
+            <td><span class="price-val">1,800</span></td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <td>Inner Lining</td>
+            <td>Bamboo viscose + Merino wool blend, moisture wicking</td>
+            <td><span class="price-val">600</span></td>
+            <td>3</td>
+            <td><span class="price-val">1,800</span></td>
+          </tr>
+          <tr>
+            <td>08</td>
+            <td>YKK Aquaguard Zipper</td>
+            <td>Dual-sided, anti-snag, rust-proof, glove-operable</td>
+            <td><span class="price-val">400</span></td>
+            <td>3</td>
+            <td><span class="price-val">1,200</span></td>
+          </tr>
+          <tr>
+            <td>09</td>
+            <td>Heat Sealing Tape</td>
+            <td>3M 9472 thermal adhesive, edge sealing for MLI layers</td>
+            <td><span class="price-val">500</span></td>
+            <td>2</td>
+            <td><span class="price-val">1,000</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Compression Stuff Sack</td>
+            <td>Waterproof dry-bag, 4-strap compression, 28×18 cm</td>
+            <td><span class="price-val">600</span></td>
+            <td>2</td>
+            <td><span class="price-val">1,200</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td>Hood + Draft Collar</td>
+            <td>Insulated, single-pull cinch, glove-operable</td>
+            <td><span class="price-val">400</span></td>
+            <td>2</td>
+            <td><span class="price-val">800</span></td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td>Stitching &amp; Assembly</td>
+            <td>Industrial stitching + ultrasonic bonding for MLI zones</td>
+            <td><span class="price-val">2,000</span></td>
+            <td>1</td>
+            <td><span class="price-val">2,000</span></td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="5">TOTAL SYSTEM COST</td>
+            <td>₹20,325</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// 04 — The Team</span>
+      <h2 class="section-title">Team <span class="g">Eight</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-id">BTT · MEMBER 01</div>
+        <div class="team-avatar">PD</div>
+        <div class="team-name">Pavishna Dhaniya R</div>
+        <div class="team-role role-visionary">◈ Visionary</div>
+        <div class="team-roll">23BTT030</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-id">BTT · MEMBER 02</div>
+        <div class="team-avatar">NY</div>
+        <div class="team-name">Nikitha Y</div>
+        <div class="team-role role-hustler">◈ Hustler</div>
+        <div class="team-roll">23BTT028</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-id">BTT · MEMBER 03</div>
+        <div class="team-avatar">NR</div>
+        <div class="team-name">Nandiesh R V</div>
+        <div class="team-role role-hustler">◈ Hustler</div>
+        <div class="team-roll">23BTT026</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-id">BTT · MEMBER 04</div>
+        <div class="team-avatar">DS</div>
+        <div class="team-name">Devaprasath S</div>
+        <div class="team-role role-designer">◈ Designer</div>
+        <div class="team-roll">23BTT009</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-id">BTT · MEMBER 05</div>
+        <div class="team-avatar">RM</div>
+        <div class="team-name">Rajesh M</div>
+        <div class="team-role role-hacker">◈ Hacker</div>
+        <div class="team-roll">23BTT308</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-id">BTT · MEMBER 06</div>
+        <div class="team-avatar">NK</div>
+        <div class="team-name">Narren Karthikeyan U</div>
+        <div class="team-role role-designer">◈ Designer</div>
+        <div class="team-roll">23BTT027</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MILESTONES -->
+<section id="milestones">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// 05 — Project Timeline</span>
+      <h2 class="section-title">Development <span class="g">Milestones</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="timeline reveal">
+      <div class="timeline-item done">
+        <h4>Statement of Work (SoW)</h4>
+        <p style="font-size:.9rem;color:var(--muted)">Project scope, challenge statement, team formation, and initial planning document.</p>
+        <div class="timeline-meta">
+          <span class="t-target">TARGET: 13/04/26</span>
+          <span class="t-done">✓ COMPLETED: 12/04/26</span>
+        </div>
+      </div>
+      <div class="timeline-item done">
+        <h4>MUP Development Bill of Materials</h4>
+        <p style="font-size:.9rem;color:var(--muted)">Full material sourcing list, specifications, quantities, and cost breakdown for prototype build.</p>
+        <div class="timeline-meta">
+          <span class="t-target">TARGET: 17/04/26</span>
+          <span class="t-done">✓ COMPLETED: 17/04/26</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <h4>Product Concept Document</h4>
+        <p style="font-size:.9rem;color:var(--muted)">ThermoShield Pro — full layer architecture, technical specifications, and thermal performance modelling.</p>
+        <div class="timeline-meta">
+          <span class="t-target">TARGET: TBD</span>
+          <span class="t-pending">⧖ PENDING</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <h4>Critical Features Demo</h4>
+        <p style="font-size:.9rem;color:var(--muted)">Flat panel prototype with thermocouple measurement across all 5 layers, thermal performance test report.</p>
+        <div class="timeline-meta">
+          <span class="t-target">TARGET: TBD</span>
+          <span class="t-pending">⧖ PENDING</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <h4>MUP Deployment &amp; Test</h4>
+        <p style="font-size:.9rem;color:var(--muted)">Full prototype assembly, field testing, and performance validation across simulated temperature ranges.</p>
+        <div class="timeline-meta">
+          <span class="t-target">TARGET: TBD</span>
+          <span class="t-pending">⧖ PENDING</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <h4>Closure Report &amp; Knowledge Transfer</h4>
+        <p style="font-size:.9rem;color:var(--muted)">Comprehensive Managed Product Innovation Report, final BoM for product pilot, and documentation handover.</p>
+        <div class="timeline-meta">
+          <span class="t-target">TARGET: TBD</span>
+          <span class="t-pending">⧖ PENDING</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Thermo<span>Shield</span> Pro</div>
+  <p>TEAM 8 · B.TECH TEXTILE TECHNOLOGY · ATTaMs INNOVATION CENTER</p>
+  <p style="margin-top:10px;font-size:.65rem;opacity:.4">PORTABLE THERMAL SLEEPING SYSTEM · DEFENCE GRADE · 2026</p>
+</footer>
+
+<script>
+  /* ===== ANIMATED PARTICLE CANVAS ===== */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], lines = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.r = Math.random() * 1.5 + 0.3;
+      this.alpha = Math.random() * 0.5 + 0.1;
+      this.color = Math.random() > 0.6 ? '#c9a84c' : '#1eb8c0';
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color.replace(')', `,${this.alpha})`).replace('rgb', 'rgba').replace('#c9a84c', `rgba(201,168,76,${this.alpha})`).replace('#1eb8c0', `rgba(30,184,192,${this.alpha})`);
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
+  }
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          const alpha = (1 - dist / 120) * 0.08;
+          ctx.strokeStyle = `rgba(201,168,76,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  /* Thermal wave rings */
+  let ringTime = 0;
+  function drawThermalRings() {
+    ringTime += 0.008;
+    const cx = W / 2, cy = H / 2;
+    for (let i = 0; i < 4; i++) {
+      const phase = (ringTime + i * 1.5) % (Math.PI * 2);
+      const r = 80 + i * 60 + Math.sin(phase) * 20;
+      const alpha = 0.03 + Math.sin(phase) * 0.02;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(30,184,192,${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Gradient background
+    const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)/1.5);
+    grad.addColorStop(0, 'rgba(10,21,32,0.4)');
+    grad.addColorStop(1, 'rgba(5,10,16,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    drawThermalRings();
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    requestAnimationFrame(animate);
+  }
+
+  resize();
+  initParticles();
+  animate();
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+
+  /* ===== SCROLL REVEAL ===== */
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  /* ===== COUNTER ANIMATION ===== */
+  function animateCounter(el, target, decimals = 0, suffix = '') {
+    let start = 0;
+    const dur = 1800;
+    const step = (ts) => {
+      if (!start) start = ts;
+      const prog = Math.min((ts - start) / dur, 1);
+      const val = prog * target;
+      el.textContent = val.toFixed(decimals) + suffix;
+      if (prog < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* Trigger counters on hero visible */
+  const heroObs = new IntersectionObserver(() => {
+    const vals = document.querySelectorAll('.stat-val');
+    // 1.59kg, -50°, 5, 97%, 45s
+    setTimeout(() => animateCounter(vals[0], 1.59, 2), 300);
+    setTimeout(() => {
+      vals[1].textContent = '−50°';
+    }, 300);
+    setTimeout(() => animateCounter(vals[2], 5, 0), 400);
+    setTimeout(() => animateCounter(vals[3], 97, 0, '%'), 500);
+    setTimeout(() => animateCounter(vals[4], 45, 0, 's'), 600);
+    heroObs.disconnect();
+  }, { threshold: 0.3 });
+  heroObs.observe(document.getElementById('hero'));
+
+  /* ===== NAV ACTIVE ===== */
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.background = window.scrollY > 50
+      ? 'rgba(5,10,16,0.95)'
+      : 'rgba(5,10,16,0.85)';
+  });
+
+  /* ===== LAYER CARD STAGGER ===== */
+  const layerCards = document.querySelectorAll('.layer-card');
+  const layerObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = [...layerCards].indexOf(e.target);
+        setTimeout(() => {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateX(0)';
+        }, idx * 120);
+        layerObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  layerCards.forEach(c => {
+    c.style.opacity = '0';
+    c.style.transform = 'translateX(-30px)';
+    c.style.transition = 'opacity 0.6s ease, transform 0.6s ease, background 0.4s, border-color 0.4s';
+    layerObs.observe(c);
+  });
+
+  /* ===== TABLE ROW STAGGER ===== */
+  const tableRows = document.querySelectorAll('.materials-table tbody tr');
+  const tableObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tableRows.forEach((row, i) => {
+          row.style.opacity = '0';
+          row.style.transform = 'translateY(10px)';
+          row.style.transition = `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`;
+          setTimeout(() => {
+            row.style.opacity = '1';
+            row.style.transform = 'none';
+          }, i * 60 + 100);
         });
-    </script>
+        tableObs.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  if (document.querySelector('.materials-table-wrap'))
+    tableObs.observe(document.querySelector('.materials-table-wrap'));
+</script>
 </body>
 </html>
