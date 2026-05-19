@@ -442,6 +442,41 @@ section {
 }
 .member-role { font-size: 0.68rem; color: var(--amber); letter-spacing: 2px; text-transform: uppercase; }
 .member-dept { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.4rem; }
+.portfolio-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 1rem;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  border: 1px solid rgba(245,158,11,0.35);
+  background: rgba(245,158,11,0.07);
+  color: var(--amber);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.portfolio-btn:hover {
+  background: rgba(245,158,11,0.18);
+  border-color: var(--amber);
+  box-shadow: 0 0 16px rgba(245,158,11,0.2);
+  transform: translateY(-2px);
+}
+.portfolio-btn::before { content: '⟶'; font-size: 0.7rem; }
+.no-portfolio {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 1rem;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  border: 1px solid rgba(71,85,105,0.35);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
 
 /* ===== ABOUT ===== */
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
@@ -1119,26 +1154,32 @@ body.lang-hi [data-langi="hi"] { display: inline; }
       <div class="member-card reveal" style="transition-delay:0s">
         <div class="member-name" style="font-size: 1.2rem; color: var(--amber);">Pavishna Dhaniya R</div>
         <div class="member-role">Textile Engineer</div>
+        <a class="portfolio-btn" href="https://pavishna-portfolio.vercel.app/" target="_blank" rel="noopener">Portfolio</a>
       </div>
       <div class="member-card reveal" style="transition-delay:0.08s">
         <div class="member-name" style="font-size: 1.2rem; color: var(--amber);">Nikitha Y</div>
         <div class="member-role">Textile Engineer</div>
+        <a class="portfolio-btn" href="https://nikithay7105-lang.github.io/portfolio/" target="_blank" rel="noopener">Portfolio</a>
       </div>
       <div class="member-card reveal" style="transition-delay:0.16s">
         <div class="member-name" style="font-size: 1.2rem; color: var(--amber);">Nandhesh R V</div>
         <div class="member-role">Textile Engineer</div>
+        <span class="no-portfolio">Portfolio coming soon</span>
       </div>
       <div class="member-card reveal" style="transition-delay:0.24s">
         <div class="member-name" style="font-size: 1.2rem; color: var(--amber);">Devaprasath S</div>
         <div class="member-role">Textile Engineer</div>
+        <a class="portfolio-btn" href="https://devaprasath27.github.io/DEVA-PORTFOLIO/" target="_blank" rel="noopener">Portfolio</a>
       </div>
       <div class="member-card reveal" style="transition-delay:0.32s">
         <div class="member-name" style="font-size: 1.2rem; color: var(--amber);">Narren Karthikeyan U</div>
         <div class="member-role">Textile Engineer</div>
+        <a class="portfolio-btn" href="https://narrenkarthikeyan.github.io/narrenportfolio/" target="_blank" rel="noopener">Portfolio</a>
       </div>
       <div class="member-card reveal" style="transition-delay:0.4s">
         <div class="member-name" style="font-size: 1.2rem; color: var(--amber);">Rajesh M</div>
         <div class="member-role">Textile Engineer</div>
+        <a class="portfolio-btn" href="https://rajesh19001.github.io/Old-Portfolioo/" target="_blank" rel="noopener">Portfolio</a>
       </div>
     </div>
 
